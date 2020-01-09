@@ -15,7 +15,7 @@ bot = telegram.Bot(token=bot_token)
 
 def get_latest_event():
     html = requests.get(
-        'https://festa.io/api/v1/organizations/528/events?page=1&pageSize=15&order=startDate')
+        'https://festa.io/api/v1/organizations/528/events?page=1&pageSize=1&order=startDate')
     soup = BeautifulSoup(html.text, 'html.parser')
     events = json.loads(str(soup))
     return events['rows'][0]
