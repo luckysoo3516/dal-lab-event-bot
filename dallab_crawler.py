@@ -6,24 +6,28 @@ from bs4 import BeautifulSoup
 from apscheduler.schedulers.blocking import BlockingScheduler
 from dotenv import load_dotenv
 
-CURRENT_EVENT_ID = 838
-
 load_dotenv()
 bot_token = os.getenv("TOKEN")
 chat_id = os.getenv("CHAT_ID")
 
 bot = telegram.Bot(token=bot_token)
 
-current_eventId = CURRENT_EVENT_ID
+
+def get_latest_event():
+    html = requests.get(
+        'https://festa.io/api/v1/organizations/528/events?page=1&pageSize=15&order=startDate')
+    soup = BeautifulSoup(html.text, 'html.parser')
+    events = json.loads(str(soup))
+    return events['rows'][0]
+
+
+current_eventId = get_latest_event()['eventId']
 
 
 def job_function():
     global current_eventId
-    url = 'https://festa.io/api/v1/organizations/528/events?page=1&pageSize=15&order=startDate'
-    html = requests.get(url)
-    soup = BeautifulSoup(html.text, 'html.parser')
-    events = json.loads(str(soup))
-    latest_event = events['rows'][0]
+
+    latest_event = get_latest_event()
     latest_eventId = latest_event['eventId']
 
     if (latest_eventId > current_eventId):
@@ -35,5 +39,5 @@ def job_function():
 
 
 sched = BlockingScheduler()
-sched.add_job(job_function, 'interval', seconds=5)
+sched.add_job(job_function, 'interval', seconds=30)
 sched.start()
