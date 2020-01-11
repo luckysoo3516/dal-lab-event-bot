@@ -10,7 +10,6 @@ sudo apt install python3-pip
 ## 모듈 설치
 ```python
 pip3 install requests
-pip3 install bs4
 pip3 install apscheduler
 pip3 install python-telegram-bot
 pip3 install python-dotenv
@@ -24,8 +23,8 @@ git clone https://github.com/luckysoo3516/dal-lab-event-bot.git
 
 ## Write `.env` file
 ```bash
-TOKEN = <Your Bot Token Id>
-CHAT_ID = <Your Chat Id>
+TOKEN=<Your Bot Token Id>
+CHAT_ID=<Your Chat Id>
 ```
 
 ## Background로 실행
